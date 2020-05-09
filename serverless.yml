@@ -33,9 +33,9 @@ functions:
            method: get
     environment:
       restaurants_api: https://jb7u0hnffb.execute-api.us-east-1.amazonaws.com/dev/restaurants
-      cognito_user_pool_id: us-east-1_sUjOua9P9
-      cognito_client_id: 2jhesmdrg00l4i7daju2cd3tlo
-      cognito_server_client_id: 58use83rkd0894tvdct9ulugq5
+      cognito_user_pool_id: us-east-1_sLVOua9P9
+      cognito_client_id: 2jhpomesmdrg00l4i7zaju2cd3t
+      cognito_server_client_id: 57tuye83rkd0894tvdct9ulugq5
       orders_api: https://jb7u0hnffb.execute-api.us-east-1.amazonaws.com/dev/orders
 
   get-restaurants:
@@ -54,7 +54,7 @@ functions:
           path: /restaurants/search
           method: post
           authorizer:
-            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_sUjOua9P9
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_sLVOua9P9
     environment:
       restaurants_table: restaurants
   place-order:
@@ -64,7 +64,7 @@ functions:
           path: /orders
           method: post
           authorizer:
-            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_sUjOua9P9
+            arn: arn:aws:cognito-idp:#{AWS::Region}:#{AWS::AccountId}:userpool/us-east-1_sLVOua9P9
     environment:
       order_events_stream: order-events
 
