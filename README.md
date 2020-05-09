@@ -1,5 +1,5 @@
-# *A Food Ordering App*
-
+# *FoodieBuddy*
+#### A Food ordering application
 ## Features :
   1. Sign Up
   2. Sign In
