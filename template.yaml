@@ -1,0 +1,146 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: 'SAM template for Serverless framework service:'
+Resources:
+  restaurantsTable:
+    Type: 'AWS::DynamoDB::Table'
+    Properties:
+      TableName: restaurants
+      AttributeDefinitions:
+        - AttributeName: name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: name
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+  BigMouthDevGetIndex:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: functions/get-index.handler
+      Runtime: nodejs10.x
+      CodeUri: >-
+        C:\MinimumViableBlueprints\MinimumViableServerless\big-mouth\.serverless\big-mouth.zip
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 'dynamodb:scan'
+              Resource: >-
+                arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
+            - Effect: Allow
+              Action: 'execute-api:Invoke'
+              Resource: >-
+                arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:*/*/GET/restaurants
+      Environment:
+        Variables:
+          restaurants_api: >-
+            https://b51c8omkbk.execute-api.us-east-1.amazonaws.com/dev/restaurants
+          cognito_user_pool_id: us-east-1_sUjOua9P9
+          cognito_client_id: 2jhesmdrg00l4i7daju2cd3tlo
+          cognito_server_client_id: 58use83rkd0894tvdct9ulugq5
+      Events:
+        Event1:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
+  BigMouthDevGetIndexLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    DependsOn:
+      - BigMouthDevGetIndex
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName:
+        Ref: BigMouthDevGetIndex
+      Principal: apigateway.amazonaws.com
+  BigMouthDevGetRestaurants:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: functions/get-restaurants.handler
+      Runtime: nodejs10.x
+      CodeUri: >-
+        C:\MinimumViableBlueprints\MinimumViableServerless\big-mouth\.serverless\big-mouth.zip
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 'dynamodb:scan'
+              Resource: >-
+                arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
+            - Effect: Allow
+              Action: 'execute-api:Invoke'
+              Resource: >-
+                arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:*/*/GET/restaurants
+      Environment:
+        Variables:
+          restaurants_table: restaurants
+      Events:
+        Event1:
+          Type: Api
+          Properties:
+            Path: /restaurants/
+            Method: get
+  Aws_iamResourcePolicy:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName:
+        'Fn::GetAtt':
+          - Aws_iam
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceAccount:
+        Ref: 'AWS::AccountId'
+  BigMouthDevGetRestaurantsLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    DependsOn:
+      - BigMouthDevGetRestaurants
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName:
+        Ref: BigMouthDevGetRestaurants
+      Principal: apigateway.amazonaws.com
+  BigMouthDevSearchRestaurants:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: functions/search-restaurants.handler
+      Runtime: nodejs10.x
+      CodeUri: >-
+        C:\MinimumViableBlueprints\MinimumViableServerless\big-mouth\.serverless\big-mouth.zip
+      MemorySize: 128
+      Timeout: 3
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: 'dynamodb:scan'
+              Resource: >-
+                arn:aws:dynamodb:#{AWS::Region}:#{AWS::AccountId}:table/restaurants
+            - Effect: Allow
+              Action: 'execute-api:Invoke'
+              Resource: >-
+                arn:aws:execute-api:#{AWS::Region}:#{AWS::AccountId}:*/*/GET/restaurants
+      Environment:
+        Variables:
+          restaurants_table: restaurants
+      Events:
+        Event1:
+          Type: Api
+          Properties:
+            Path: /restaurants/search
+            Method: post
+  BigMouthDevSearchRestaurantsLambdaPermission:
+    Type: 'AWS::Lambda::Permission'
+    DependsOn:
+      - BigMouthDevSearchRestaurants
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName:
+        Ref: BigMouthDevSearchRestaurants
+      Principal: apigateway.amazonaws.com
