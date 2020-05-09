@@ -22,17 +22,25 @@
    * SNS
    * AWS Kinesis
   
+   ### Sign Up
   ![Sign Up](/Images/RegisterUser.png)
 
+   ### Index Page
   ![Index Page](/Images/GetIndex.png)
 
+   ### Sign In Page
   ![SignIn](/Images/SignIn.png)
 
+   ### Authenticated Page
   ![SignOut](/Images/SignOut.png)
+  
+  ### Authenticated Page
   
   ![SignedInAuthenticated](/Images/SignedInAuthenticated.png)
   
+  ### Results of Searched Restaurants
   ![SearchRestaurants](/Images/SearchRestaurants.png)
   
+  ### Order Placed Popup Notification
   ![OrderPlaced](/Images/OrderPlaced.png)
   
